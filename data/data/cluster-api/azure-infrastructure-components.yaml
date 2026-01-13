@@ -2960,12 +2960,6 @@ spec:
                                     properties:
                                       name:
                                         type: string
-                                      zones:
-                                        description: Zones mentions the list of zones
-                                          the NAT gateway should be a part of.
-                                        items:
-                                          type: string
-                                        type: array
                                     required:
                                     - name
                                     type: object
@@ -3485,12 +3479,6 @@ spec:
                                   properties:
                                     name:
                                       type: string
-                                    zones:
-                                      description: Zones mentions the list of zones
-                                        the NAT gateway should be a part of.
-                                      items:
-                                        type: string
-                                      type: array
                                   required:
                                   - name
                                   type: object
@@ -10483,7 +10471,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: bastionhosts.network.azure.com
@@ -12250,7 +12238,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: extensions.kubernetesconfiguration.azure.com
@@ -13539,6 +13527,1268 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: Ready
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].severity
+      name: Severity
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].reason
+      name: Reason
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].message
+      name: Message
+      type: string
+    name: v1api20241101
+    schema:
+      openAPIV3Schema:
+        description: |-
+          Generator information:
+          - Generated from: /kubernetesconfiguration/resource-manager/Microsoft.KubernetesConfiguration/extensions/stable/2024-11-01/extensions.json
+          - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{clusterRp}/{clusterResourceName}/{clusterName}/providers/Microsoft.KubernetesConfiguration/extensions/{extensionName}
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              aksAssignedIdentity:
+                description: 'AksAssignedIdentity: Identity of the Extension resource
+                  in an AKS cluster'
+                properties:
+                  type:
+                    description: 'Type: The identity type.'
+                    enum:
+                    - SystemAssigned
+                    - UserAssigned
+                    type: string
+                type: object
+              autoUpgradeMinorVersion:
+                description: 'AutoUpgradeMinorVersion: Flag to note if this extension
+                  participates in auto upgrade of minor version, or not.'
+                type: boolean
+              azureName:
+                description: |-
+                  AzureName: The name of the resource in Azure. This is often the same as the name of the resource in Kubernetes but it
+                  doesn't have to be.
+                type: string
+              configurationProtectedSettings:
+                description: |-
+                  ConfigurationProtectedSettings: Configuration settings that are sensitive, as name-value pairs for configuring this
+                  extension.
+                properties:
+                  name:
+                    description: |-
+                      Name is the name of the Kubernetes secret being referenced.
+                      The secret must be in the same namespace as the resource
+                    type: string
+                required:
+                - name
+                type: object
+              configurationSettings:
+                additionalProperties:
+                  type: string
+                description: 'ConfigurationSettings: Configuration settings, as name-value
+                  pairs for configuring this extension.'
+                type: object
+              extensionType:
+                description: |-
+                  ExtensionType: Type of the Extension, of which this resource is an instance of.  It must be one of the Extension Types
+                  registered with Microsoft.KubernetesConfiguration by the Extension publisher.
+                type: string
+              identity:
+                description: 'Identity: Identity of the Extension resource'
+                properties:
+                  type:
+                    description: 'Type: The identity type.'
+                    enum:
+                    - SystemAssigned
+                    type: string
+                type: object
+              operatorSpec:
+                description: |-
+                  OperatorSpec: The specification for configuring operator behavior. This field is interpreted by the operator and not
+                  passed directly to Azure
+                properties:
+                  configMapExpressions:
+                    description: 'ConfigMapExpressions: configures where to place
+                      operator written dynamic ConfigMaps (created with CEL expressions).'
+                    items:
+                      description: |-
+                        DestinationExpression is a CEL expression and a destination to store the result in. The destination may
+                        be a secret or a configmap. The value of the expression is stored at the specified location in
+                        the destination.
+                      properties:
+                        key:
+                          description: |-
+                            Key is the key in the ConfigMap or Secret being written to. If the CEL expression in Value returns a string
+                            this is required to identify what key to write to. If the CEL expression in Value returns a map[string]string
+                            Key must not be set, instead the keys written will be determined dynamically based on the keys of the resulting
+                            map[string]string.
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes configmap or secret to write to.
+                            The configmap or secret will be created in the same namespace as the resource.
+                          type: string
+                        value:
+                          description: |-
+                            Value is a CEL expression. The CEL expression may return a string or a map[string]string. For more information
+                            on CEL in ASO see https://azure.github.io/azure-service-operator/guide/expressions/
+                          type: string
+                      required:
+                      - name
+                      - value
+                      type: object
+                    type: array
+                  configMaps:
+                    description: 'ConfigMaps: configures where to place operator written
+                      ConfigMaps.'
+                    properties:
+                      principalId:
+                        description: 'PrincipalId: indicates where the PrincipalId
+                          config map should be placed. If omitted, no config map will
+                          be created.'
+                        properties:
+                          key:
+                            description: Key is the key in the ConfigMap being referenced
+                            type: string
+                          name:
+                            description: |-
+                              Name is the name of the Kubernetes ConfigMap to write to.
+                              The ConfigMap will be created in the same namespace as the resource.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        type: object
+                    type: object
+                  secretExpressions:
+                    description: 'SecretExpressions: configures where to place operator
+                      written dynamic secrets (created with CEL expressions).'
+                    items:
+                      description: |-
+                        DestinationExpression is a CEL expression and a destination to store the result in. The destination may
+                        be a secret or a configmap. The value of the expression is stored at the specified location in
+                        the destination.
+                      properties:
+                        key:
+                          description: |-
+                            Key is the key in the ConfigMap or Secret being written to. If the CEL expression in Value returns a string
+                            this is required to identify what key to write to. If the CEL expression in Value returns a map[string]string
+                            Key must not be set, instead the keys written will be determined dynamically based on the keys of the resulting
+                            map[string]string.
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes configmap or secret to write to.
+                            The configmap or secret will be created in the same namespace as the resource.
+                          type: string
+                        value:
+                          description: |-
+                            Value is a CEL expression. The CEL expression may return a string or a map[string]string. For more information
+                            on CEL in ASO see https://azure.github.io/azure-service-operator/guide/expressions/
+                          type: string
+                      required:
+                      - name
+                      - value
+                      type: object
+                    type: array
+                type: object
+              owner:
+                description: |-
+                  Owner: The owner of the resource. The owner controls where the resource goes when it is deployed. The owner also
+                  controls the resources lifecycle. When the owner is deleted the resource will also be deleted. This resource is an
+                  extension resource, which means that any other Azure resource can be its owner.
+                properties:
+                  armId:
+                    description: Ownership across namespaces is not supported.
+                    pattern: (?i)(^(/subscriptions/([^/]+)(/resourcegroups/([^/]+))?)?/providers/([^/]+)/([^/]+/[^/]+)(/([^/]+/[^/]+))*$|^/subscriptions/([^/]+)(/resourcegroups/([^/]+))?$)
+                    type: string
+                  group:
+                    description: Group is the Kubernetes group of the resource.
+                    type: string
+                  kind:
+                    description: Kind is the Kubernetes kind of the resource.
+                    type: string
+                  name:
+                    description: This is the name of the Kubernetes resource to reference.
+                    type: string
+                type: object
+              plan:
+                description: 'Plan: The plan information.'
+                properties:
+                  name:
+                    description: 'Name: A user defined name of the 3rd Party Artifact
+                      that is being procured.'
+                    type: string
+                  product:
+                    description: |-
+                      Product: The 3rd Party artifact that is being procured. E.g. NewRelic. Product maps to the OfferID specified for the
+                      artifact at the time of Data Market onboarding.
+                    type: string
+                  promotionCode:
+                    description: 'PromotionCode: A publisher provided promotion code
+                      as provisioned in Data Market for the said product/artifact.'
+                    type: string
+                  publisher:
+                    description: 'Publisher: The publisher of the 3rd Party Artifact
+                      that is being bought. E.g. NewRelic'
+                    type: string
+                  version:
+                    description: 'Version: The version of the desired product/artifact.'
+                    type: string
+                required:
+                - name
+                - product
+                - publisher
+                type: object
+              releaseTrain:
+                description: |-
+                  ReleaseTrain: ReleaseTrain this extension participates in for auto-upgrade (e.g. Stable, Preview, etc.) - only if
+                  autoUpgradeMinorVersion is 'true'.
+                type: string
+              scope:
+                description: 'Scope: Scope at which the extension is installed.'
+                properties:
+                  cluster:
+                    description: 'Cluster: Specifies that the scope of the extension
+                      is Cluster'
+                    properties:
+                      releaseNamespace:
+                        description: |-
+                          ReleaseNamespace: Namespace where the extension Release must be placed, for a Cluster scoped extension.  If this
+                          namespace does not exist, it will be created
+                        type: string
+                    type: object
+                  namespace:
+                    description: 'Namespace: Specifies that the scope of the extension
+                      is Namespace'
+                    properties:
+                      targetNamespace:
+                        description: |-
+                          TargetNamespace: Namespace where the extension will be created for an Namespace scoped extension.  If this namespace
+                          does not exist, it will be created
+                        type: string
+                    type: object
+                type: object
+              systemData:
+                description: |-
+                  SystemData: Top level metadata
+                  https://github.com/Azure/azure-resource-manager-rpc/blob/master/v1.0/common-api-contracts.md#system-metadata-for-all-azure-resources
+                properties:
+                  createdAt:
+                    description: 'CreatedAt: The timestamp of resource creation (UTC).'
+                    type: string
+                  createdBy:
+                    description: 'CreatedBy: The identity that created the resource.'
+                    type: string
+                  createdByType:
+                    description: 'CreatedByType: The type of identity that created
+                      the resource.'
+                    enum:
+                    - Application
+                    - Key
+                    - ManagedIdentity
+                    - User
+                    type: string
+                  lastModifiedAt:
+                    description: 'LastModifiedAt: The timestamp of resource last modification
+                      (UTC)'
+                    type: string
+                  lastModifiedBy:
+                    description: 'LastModifiedBy: The identity that last modified
+                      the resource.'
+                    type: string
+                  lastModifiedByType:
+                    description: 'LastModifiedByType: The type of identity that last
+                      modified the resource.'
+                    enum:
+                    - Application
+                    - Key
+                    - ManagedIdentity
+                    - User
+                    type: string
+                type: object
+              version:
+                description: |-
+                  Version: User-specified version of the extension for this extension to 'pin'. To use 'version', autoUpgradeMinorVersion
+                  must be 'false'.
+                type: string
+            required:
+            - owner
+            type: object
+          status:
+            description: The Extension object.
+            properties:
+              aksAssignedIdentity:
+                description: 'AksAssignedIdentity: Identity of the Extension resource
+                  in an AKS cluster'
+                properties:
+                  principalId:
+                    description: 'PrincipalId: The principal ID of resource identity.'
+                    type: string
+                  tenantId:
+                    description: 'TenantId: The tenant ID of resource.'
+                    type: string
+                  type:
+                    description: 'Type: The identity type.'
+                    type: string
+                type: object
+              autoUpgradeMinorVersion:
+                description: 'AutoUpgradeMinorVersion: Flag to note if this extension
+                  participates in auto upgrade of minor version, or not.'
+                type: boolean
+              conditions:
+                description: 'Conditions: The observed state of the resource'
+                items:
+                  description: Condition defines an extension to status (an observation)
+                    of a resource
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time the condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Message is a human readable message indicating
+                        details about the transition. This field may be empty.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration is the .metadata.generation that the condition was set based upon. For instance, if
+                        .metadata.generation is currently 12, but the .status.condition[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: |-
+                        Reason for the condition's last transition.
+                        Reasons are upper CamelCase (PascalCase) with no spaces. A reason is always provided, this field will not be empty.
+                      type: string
+                    severity:
+                      description: |-
+                        Severity with which to treat failures of this type of condition.
+                        For conditions which have positive polarity (Status == True is their normal/healthy state), this will be omitted when Status == True
+                        For conditions which have negative polarity (Status == False is their normal/healthy state), this will be omitted when Status == False.
+                        This is omitted in all cases when Status == Unknown
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, or
+                        Unknown.
+                      type: string
+                    type:
+                      description: Type of condition.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+              configurationProtectedSettings:
+                additionalProperties:
+                  type: string
+                description: |-
+                  ConfigurationProtectedSettings: Configuration settings that are sensitive, as name-value pairs for configuring this
+                  extension.
+                type: object
+              configurationSettings:
+                additionalProperties:
+                  type: string
+                description: 'ConfigurationSettings: Configuration settings, as name-value
+                  pairs for configuring this extension.'
+                type: object
+              currentVersion:
+                description: 'CurrentVersion: Currently installed version of the extension.'
+                type: string
+              customLocationSettings:
+                additionalProperties:
+                  type: string
+                description: 'CustomLocationSettings: Custom Location settings properties.'
+                type: object
+              errorInfo:
+                description: 'ErrorInfo: Error information from the Agent - e.g. errors
+                  during installation.'
+                properties:
+                  additionalInfo:
+                    description: 'AdditionalInfo: The error additional info.'
+                    items:
+                      description: The resource management error additional info.
+                      properties:
+                        info:
+                          additionalProperties:
+                            x-kubernetes-preserve-unknown-fields: true
+                          description: 'Info: The additional info.'
+                          type: object
+                        type:
+                          description: 'Type: The additional info type.'
+                          type: string
+                      type: object
+                    type: array
+                  code:
+                    description: 'Code: The error code.'
+                    type: string
+                  details:
+                    description: 'Details: The error details.'
+                    items:
+                      properties:
+                        additionalInfo:
+                          description: 'AdditionalInfo: The error additional info.'
+                          items:
+                            description: The resource management error additional
+                              info.
+                            properties:
+                              info:
+                                additionalProperties:
+                                  x-kubernetes-preserve-unknown-fields: true
+                                description: 'Info: The additional info.'
+                                type: object
+                              type:
+                                description: 'Type: The additional info type.'
+                                type: string
+                            type: object
+                          type: array
+                        code:
+                          description: 'Code: The error code.'
+                          type: string
+                        message:
+                          description: 'Message: The error message.'
+                          type: string
+                        target:
+                          description: 'Target: The error target.'
+                          type: string
+                      type: object
+                    type: array
+                  message:
+                    description: 'Message: The error message.'
+                    type: string
+                  target:
+                    description: 'Target: The error target.'
+                    type: string
+                type: object
+              extensionType:
+                description: |-
+                  ExtensionType: Type of the Extension, of which this resource is an instance of.  It must be one of the Extension Types
+                  registered with Microsoft.KubernetesConfiguration by the Extension publisher.
+                type: string
+              id:
+                description: |-
+                  Id: Fully qualified resource ID for the resource. Ex -
+                  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+                type: string
+              identity:
+                description: 'Identity: Identity of the Extension resource'
+                properties:
+                  principalId:
+                    description: 'PrincipalId: The principal ID of resource identity.'
+                    type: string
+                  tenantId:
+                    description: 'TenantId: The tenant ID of resource.'
+                    type: string
+                  type:
+                    description: 'Type: The identity type.'
+                    type: string
+                type: object
+              isSystemExtension:
+                description: 'IsSystemExtension: Flag to note if this extension is
+                  a system extension'
+                type: boolean
+              name:
+                description: 'Name: The name of the resource'
+                type: string
+              packageUri:
+                description: 'PackageUri: Uri of the Helm package'
+                type: string
+              plan:
+                description: 'Plan: The plan information.'
+                properties:
+                  name:
+                    description: 'Name: A user defined name of the 3rd Party Artifact
+                      that is being procured.'
+                    type: string
+                  product:
+                    description: |-
+                      Product: The 3rd Party artifact that is being procured. E.g. NewRelic. Product maps to the OfferID specified for the
+                      artifact at the time of Data Market onboarding.
+                    type: string
+                  promotionCode:
+                    description: 'PromotionCode: A publisher provided promotion code
+                      as provisioned in Data Market for the said product/artifact.'
+                    type: string
+                  publisher:
+                    description: 'Publisher: The publisher of the 3rd Party Artifact
+                      that is being bought. E.g. NewRelic'
+                    type: string
+                  version:
+                    description: 'Version: The version of the desired product/artifact.'
+                    type: string
+                type: object
+              releaseTrain:
+                description: |-
+                  ReleaseTrain: ReleaseTrain this extension participates in for auto-upgrade (e.g. Stable, Preview, etc.) - only if
+                  autoUpgradeMinorVersion is 'true'.
+                type: string
+              scope:
+                description: 'Scope: Scope at which the extension is installed.'
+                properties:
+                  cluster:
+                    description: 'Cluster: Specifies that the scope of the extension
+                      is Cluster'
+                    properties:
+                      releaseNamespace:
+                        description: |-
+                          ReleaseNamespace: Namespace where the extension Release must be placed, for a Cluster scoped extension.  If this
+                          namespace does not exist, it will be created
+                        type: string
+                    type: object
+                  namespace:
+                    description: 'Namespace: Specifies that the scope of the extension
+                      is Namespace'
+                    properties:
+                      targetNamespace:
+                        description: |-
+                          TargetNamespace: Namespace where the extension will be created for an Namespace scoped extension.  If this namespace
+                          does not exist, it will be created
+                        type: string
+                    type: object
+                type: object
+              statuses:
+                description: 'Statuses: Status from this extension.'
+                items:
+                  description: Status from the extension.
+                  properties:
+                    code:
+                      description: 'Code: Status code provided by the Extension'
+                      type: string
+                    displayStatus:
+                      description: 'DisplayStatus: Short description of status of
+                        the extension.'
+                      type: string
+                    level:
+                      description: 'Level: Level of the status.'
+                      type: string
+                    message:
+                      description: 'Message: Detailed message of the status from the
+                        Extension.'
+                      type: string
+                    time:
+                      description: 'Time: DateLiteral (per ISO8601) noting the time
+                        of installation status.'
+                      type: string
+                  type: object
+                type: array
+              systemData:
+                description: |-
+                  SystemData: Top level metadata
+                  https://github.com/Azure/azure-resource-manager-rpc/blob/master/v1.0/common-api-contracts.md#system-metadata-for-all-azure-resources
+                properties:
+                  createdAt:
+                    description: 'CreatedAt: The timestamp of resource creation (UTC).'
+                    type: string
+                  createdBy:
+                    description: 'CreatedBy: The identity that created the resource.'
+                    type: string
+                  createdByType:
+                    description: 'CreatedByType: The type of identity that created
+                      the resource.'
+                    type: string
+                  lastModifiedAt:
+                    description: 'LastModifiedAt: The timestamp of resource last modification
+                      (UTC)'
+                    type: string
+                  lastModifiedBy:
+                    description: 'LastModifiedBy: The identity that last modified
+                      the resource.'
+                    type: string
+                  lastModifiedByType:
+                    description: 'LastModifiedByType: The type of identity that last
+                      modified the resource.'
+                    type: string
+                type: object
+              type:
+                description: 'Type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines"
+                  or "Microsoft.Storage/storageAccounts"'
+                type: string
+              version:
+                description: |-
+                  Version: User-specified version of the extension for this extension to 'pin'. To use 'version', autoUpgradeMinorVersion
+                  must be 'false'.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: Ready
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].severity
+      name: Severity
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].reason
+      name: Reason
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].message
+      name: Message
+      type: string
+    name: v1api20241101storage
+    schema:
+      openAPIV3Schema:
+        description: |-
+          Storage version of v1api20241101.Extension
+          Generator information:
+          - Generated from: /kubernetesconfiguration/resource-manager/Microsoft.KubernetesConfiguration/extensions/stable/2024-11-01/extensions.json
+          - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{clusterRp}/{clusterResourceName}/{clusterName}/providers/Microsoft.KubernetesConfiguration/extensions/{extensionName}
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Storage version of v1api20241101.Extension_Spec
+            properties:
+              $propertyBag:
+                additionalProperties:
+                  type: string
+                description: |-
+                  PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                  resources, allowing for full fidelity round trip conversions
+                type: object
+              aksAssignedIdentity:
+                description: Storage version of v1api20241101.Extension_Properties_AksAssignedIdentity_Spec
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  type:
+                    type: string
+                type: object
+              autoUpgradeMinorVersion:
+                type: boolean
+              azureName:
+                description: |-
+                  AzureName: The name of the resource in Azure. This is often the same as the name of the resource in Kubernetes but it
+                  doesn't have to be.
+                type: string
+              configurationProtectedSettings:
+                description: |-
+                  SecretMapReference is a reference to a Kubernetes secret in the same namespace as
+                  the resource it is on.
+                properties:
+                  name:
+                    description: |-
+                      Name is the name of the Kubernetes secret being referenced.
+                      The secret must be in the same namespace as the resource
+                    type: string
+                required:
+                - name
+                type: object
+              configurationSettings:
+                additionalProperties:
+                  type: string
+                type: object
+              extensionType:
+                type: string
+              identity:
+                description: |-
+                  Storage version of v1api20241101.Identity
+                  Identity for the resource.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  type:
+                    type: string
+                type: object
+              operatorSpec:
+                description: |-
+                  Storage version of v1api20241101.ExtensionOperatorSpec
+                  Details for configuring operator behavior. Fields in this struct are interpreted by the operator directly rather than being passed to Azure
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  configMapExpressions:
+                    items:
+                      description: |-
+                        DestinationExpression is a CEL expression and a destination to store the result in. The destination may
+                        be a secret or a configmap. The value of the expression is stored at the specified location in
+                        the destination.
+                      properties:
+                        key:
+                          description: |-
+                            Key is the key in the ConfigMap or Secret being written to. If the CEL expression in Value returns a string
+                            this is required to identify what key to write to. If the CEL expression in Value returns a map[string]string
+                            Key must not be set, instead the keys written will be determined dynamically based on the keys of the resulting
+                            map[string]string.
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes configmap or secret to write to.
+                            The configmap or secret will be created in the same namespace as the resource.
+                          type: string
+                        value:
+                          description: |-
+                            Value is a CEL expression. The CEL expression may return a string or a map[string]string. For more information
+                            on CEL in ASO see https://azure.github.io/azure-service-operator/guide/expressions/
+                          type: string
+                      required:
+                      - name
+                      - value
+                      type: object
+                    type: array
+                  configMaps:
+                    description: Storage version of v1api20241101.ExtensionOperatorConfigMaps
+                    properties:
+                      $propertyBag:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                          resources, allowing for full fidelity round trip conversions
+                        type: object
+                      principalId:
+                        description: |-
+                          ConfigMapDestination describes the location to store a single configmap value
+                          Note: This is similar to: SecretDestination in secrets.go.
+                          Changes to one may need to be made to the others as well.
+                        properties:
+                          key:
+                            description: Key is the key in the ConfigMap being referenced
+                            type: string
+                          name:
+                            description: |-
+                              Name is the name of the Kubernetes ConfigMap to write to.
+                              The ConfigMap will be created in the same namespace as the resource.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        type: object
+                    type: object
+                  secretExpressions:
+                    items:
+                      description: |-
+                        DestinationExpression is a CEL expression and a destination to store the result in. The destination may
+                        be a secret or a configmap. The value of the expression is stored at the specified location in
+                        the destination.
+                      properties:
+                        key:
+                          description: |-
+                            Key is the key in the ConfigMap or Secret being written to. If the CEL expression in Value returns a string
+                            this is required to identify what key to write to. If the CEL expression in Value returns a map[string]string
+                            Key must not be set, instead the keys written will be determined dynamically based on the keys of the resulting
+                            map[string]string.
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes configmap or secret to write to.
+                            The configmap or secret will be created in the same namespace as the resource.
+                          type: string
+                        value:
+                          description: |-
+                            Value is a CEL expression. The CEL expression may return a string or a map[string]string. For more information
+                            on CEL in ASO see https://azure.github.io/azure-service-operator/guide/expressions/
+                          type: string
+                      required:
+                      - name
+                      - value
+                      type: object
+                    type: array
+                type: object
+              originalVersion:
+                type: string
+              owner:
+                description: |-
+                  Owner: The owner of the resource. The owner controls where the resource goes when it is deployed. The owner also
+                  controls the resources lifecycle. When the owner is deleted the resource will also be deleted. This resource is an
+                  extension resource, which means that any other Azure resource can be its owner.
+                properties:
+                  armId:
+                    description: Ownership across namespaces is not supported.
+                    pattern: (?i)(^(/subscriptions/([^/]+)(/resourcegroups/([^/]+))?)?/providers/([^/]+)/([^/]+/[^/]+)(/([^/]+/[^/]+))*$|^/subscriptions/([^/]+)(/resourcegroups/([^/]+))?$)
+                    type: string
+                  group:
+                    description: Group is the Kubernetes group of the resource.
+                    type: string
+                  kind:
+                    description: Kind is the Kubernetes kind of the resource.
+                    type: string
+                  name:
+                    description: This is the name of the Kubernetes resource to reference.
+                    type: string
+                type: object
+              plan:
+                description: |-
+                  Storage version of v1api20241101.Plan
+                  Plan for the resource.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  name:
+                    type: string
+                  product:
+                    type: string
+                  promotionCode:
+                    type: string
+                  publisher:
+                    type: string
+                  version:
+                    type: string
+                type: object
+              releaseTrain:
+                type: string
+              scope:
+                description: |-
+                  Storage version of v1api20241101.Scope
+                  Scope of the extension. It can be either Cluster or Namespace; but not both.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  cluster:
+                    description: |-
+                      Storage version of v1api20241101.ScopeCluster
+                      Specifies that the scope of the extension is Cluster
+                    properties:
+                      $propertyBag:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                          resources, allowing for full fidelity round trip conversions
+                        type: object
+                      releaseNamespace:
+                        type: string
+                    type: object
+                  namespace:
+                    description: |-
+                      Storage version of v1api20241101.ScopeNamespace
+                      Specifies that the scope of the extension is Namespace
+                    properties:
+                      $propertyBag:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                          resources, allowing for full fidelity round trip conversions
+                        type: object
+                      targetNamespace:
+                        type: string
+                    type: object
+                type: object
+              systemData:
+                description: |-
+                  Storage version of v1api20241101.SystemData
+                  Metadata pertaining to creation and last modification of the resource.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  createdAt:
+                    type: string
+                  createdBy:
+                    type: string
+                  createdByType:
+                    type: string
+                  lastModifiedAt:
+                    type: string
+                  lastModifiedBy:
+                    type: string
+                  lastModifiedByType:
+                    type: string
+                type: object
+              version:
+                type: string
+            required:
+            - owner
+            type: object
+          status:
+            description: |-
+              Storage version of v1api20241101.Extension_STATUS
+              The Extension object.
+            properties:
+              $propertyBag:
+                additionalProperties:
+                  type: string
+                description: |-
+                  PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                  resources, allowing for full fidelity round trip conversions
+                type: object
+              aksAssignedIdentity:
+                description: Storage version of v1api20241101.Extension_Properties_AksAssignedIdentity_STATUS
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  principalId:
+                    type: string
+                  tenantId:
+                    type: string
+                  type:
+                    type: string
+                type: object
+              autoUpgradeMinorVersion:
+                type: boolean
+              conditions:
+                items:
+                  description: Condition defines an extension to status (an observation)
+                    of a resource
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time the condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Message is a human readable message indicating
+                        details about the transition. This field may be empty.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration is the .metadata.generation that the condition was set based upon. For instance, if
+                        .metadata.generation is currently 12, but the .status.condition[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: |-
+                        Reason for the condition's last transition.
+                        Reasons are upper CamelCase (PascalCase) with no spaces. A reason is always provided, this field will not be empty.
+                      type: string
+                    severity:
+                      description: |-
+                        Severity with which to treat failures of this type of condition.
+                        For conditions which have positive polarity (Status == True is their normal/healthy state), this will be omitted when Status == True
+                        For conditions which have negative polarity (Status == False is their normal/healthy state), this will be omitted when Status == False.
+                        This is omitted in all cases when Status == Unknown
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, or
+                        Unknown.
+                      type: string
+                    type:
+                      description: Type of condition.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+              configurationProtectedSettings:
+                additionalProperties:
+                  type: string
+                type: object
+              configurationSettings:
+                additionalProperties:
+                  type: string
+                type: object
+              currentVersion:
+                type: string
+              customLocationSettings:
+                additionalProperties:
+                  type: string
+                type: object
+              errorInfo:
+                description: |-
+                  Storage version of v1api20241101.ErrorDetail_STATUS
+                  The error detail.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  additionalInfo:
+                    items:
+                      description: |-
+                        Storage version of v1api20241101.ErrorAdditionalInfo_STATUS
+                        The resource management error additional info.
+                      properties:
+                        $propertyBag:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                            resources, allowing for full fidelity round trip conversions
+                          type: object
+                        info:
+                          additionalProperties:
+                            x-kubernetes-preserve-unknown-fields: true
+                          type: object
+                        type:
+                          type: string
+                      type: object
+                    type: array
+                  code:
+                    type: string
+                  details:
+                    items:
+                      description: Storage version of v1api20241101.ErrorDetail_STATUS_Unrolled
+                      properties:
+                        $propertyBag:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                            resources, allowing for full fidelity round trip conversions
+                          type: object
+                        additionalInfo:
+                          items:
+                            description: |-
+                              Storage version of v1api20241101.ErrorAdditionalInfo_STATUS
+                              The resource management error additional info.
+                            properties:
+                              $propertyBag:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                                  resources, allowing for full fidelity round trip conversions
+                                type: object
+                              info:
+                                additionalProperties:
+                                  x-kubernetes-preserve-unknown-fields: true
+                                type: object
+                              type:
+                                type: string
+                            type: object
+                          type: array
+                        code:
+                          type: string
+                        message:
+                          type: string
+                        target:
+                          type: string
+                      type: object
+                    type: array
+                  message:
+                    type: string
+                  target:
+                    type: string
+                type: object
+              extensionType:
+                type: string
+              id:
+                type: string
+              identity:
+                description: |-
+                  Storage version of v1api20241101.Identity_STATUS
+                  Identity for the resource.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  principalId:
+                    type: string
+                  tenantId:
+                    type: string
+                  type:
+                    type: string
+                type: object
+              isSystemExtension:
+                type: boolean
+              name:
+                type: string
+              packageUri:
+                type: string
+              plan:
+                description: |-
+                  Storage version of v1api20241101.Plan_STATUS
+                  Plan for the resource.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  name:
+                    type: string
+                  product:
+                    type: string
+                  promotionCode:
+                    type: string
+                  publisher:
+                    type: string
+                  version:
+                    type: string
+                type: object
+              releaseTrain:
+                type: string
+              scope:
+                description: |-
+                  Storage version of v1api20241101.Scope_STATUS
+                  Scope of the extension. It can be either Cluster or Namespace; but not both.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  cluster:
+                    description: |-
+                      Storage version of v1api20241101.ScopeCluster_STATUS
+                      Specifies that the scope of the extension is Cluster
+                    properties:
+                      $propertyBag:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                          resources, allowing for full fidelity round trip conversions
+                        type: object
+                      releaseNamespace:
+                        type: string
+                    type: object
+                  namespace:
+                    description: |-
+                      Storage version of v1api20241101.ScopeNamespace_STATUS
+                      Specifies that the scope of the extension is Namespace
+                    properties:
+                      $propertyBag:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                          resources, allowing for full fidelity round trip conversions
+                        type: object
+                      targetNamespace:
+                        type: string
+                    type: object
+                type: object
+              statuses:
+                items:
+                  description: |-
+                    Storage version of v1api20241101.ExtensionStatus_STATUS
+                    Status from the extension.
+                  properties:
+                    $propertyBag:
+                      additionalProperties:
+                        type: string
+                      description: |-
+                        PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                        resources, allowing for full fidelity round trip conversions
+                      type: object
+                    code:
+                      type: string
+                    displayStatus:
+                      type: string
+                    level:
+                      type: string
+                    message:
+                      type: string
+                    time:
+                      type: string
+                  type: object
+                type: array
+              systemData:
+                description: |-
+                  Storage version of v1api20241101.SystemData_STATUS
+                  Metadata pertaining to creation and last modification of the resource.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  createdAt:
+                    type: string
+                  createdBy:
+                    type: string
+                  createdByType:
+                    type: string
+                  lastModifiedAt:
+                    type: string
+                  lastModifiedBy:
+                    type: string
+                  lastModifiedByType:
+                    type: string
+                type: object
+              type:
+                type: string
+              version:
+                type: string
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -13551,7 +14801,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: fleetsmembers.containerservice.azure.com
@@ -14133,7 +15383,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: managedclusters.containerservice.azure.com
@@ -56788,7 +58038,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: managedclustersagentpools.containerservice.azure.com
@@ -70041,7 +71291,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: natgateways.network.azure.com
@@ -71557,7 +72807,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: privateendpoints.network.azure.com
@@ -74389,7 +75639,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: resourcegroups.resources.azure.com
@@ -74872,7 +76122,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: virtualnetworks.network.azure.com
@@ -76788,7 +78038,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.16.3
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     visualizer.cluster.x-k8s.io: ""
     visualizer.cluster.x-k8s.io/provider-type: infrastructure
   name: virtualnetworkssubnets.network.azure.com
@@ -77289,8 +78539,9 @@ spec:
                   type: object
                 type: array
               ipConfigurations:
-                description: 'IpConfigurations: An array of references to the network
-                  interface IP configurations using subnet.'
+                description: |-
+                  IpConfigurations: An array of references to the network interface IP configurations using subnet. This field is not
+                  included if there are more than 2000 entries.
                 items:
                   description: IP configuration.
                   properties:
@@ -78651,8 +79902,9 @@ spec:
                   type: object
                 type: array
               ipConfigurations:
-                description: 'IpConfigurations: An array of references to the network
-                  interface IP configurations using subnet.'
+                description: |-
+                  IpConfigurations: An array of references to the network interface IP configurations using subnet. This field is not
+                  included if there are more than 2000 entries.
                 items:
                   description: IP configuration.
                   properties:
@@ -79807,6 +81059,36 @@ rules:
   - patch
   - update
 - apiGroups:
+  - app.azure.com
+  resources:
+  - authconfigs
+  - containerapps
+  - jobs
+  - managedenvironments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - app.azure.com
+  resources:
+  - authconfigs/finalizers
+  - authconfigs/status
+  - containerapps/finalizers
+  - containerapps/status
+  - jobs/finalizers
+  - jobs/status
+  - managedenvironments/finalizers
+  - managedenvironments/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - appconfiguration.azure.com
   resources:
   - configurationstores
@@ -80029,6 +81311,7 @@ rules:
   - containerregistry.azure.com
   resources:
   - registries
+  - registryreplications
   verbs:
   - create
   - delete
@@ -80042,6 +81325,8 @@ rules:
   resources:
   - registries/finalizers
   - registries/status
+  - registryreplications/finalizers
+  - registryreplications/status
   verbs:
   - get
   - patch
@@ -80212,9 +81497,12 @@ rules:
   - dbforpostgresql.azure.com
   resources:
   - flexibleservers
+  - flexibleserversadvancedthreatprotectionsettings
+  - flexibleserversbackups
   - flexibleserversconfigurations
   - flexibleserversdatabases
   - flexibleserversfirewallrules
+  - flexibleserversvirtualendpoints
   - users
   verbs:
   - create
@@ -80229,12 +81517,18 @@ rules:
   resources:
   - flexibleservers/finalizers
   - flexibleservers/status
+  - flexibleserversadvancedthreatprotectionsettings/finalizers
+  - flexibleserversadvancedthreatprotectionsettings/status
+  - flexibleserversbackups/finalizers
+  - flexibleserversbackups/status
   - flexibleserversconfigurations/finalizers
   - flexibleserversconfigurations/status
   - flexibleserversdatabases/finalizers
   - flexibleserversdatabases/status
   - flexibleserversfirewallrules/finalizers
   - flexibleserversfirewallrules/status
+  - flexibleserversvirtualendpoints/finalizers
+  - flexibleserversvirtualendpoints/status
   - users/finalizers
   - users/status
   verbs:
@@ -80270,6 +81564,7 @@ rules:
   - mongodbdatabasecollectionthroughputsettings
   - mongodbdatabases
   - mongodbdatabasethroughputsettings
+  - mongodbuserdefinitions
   - sqldatabasecontainers
   - sqldatabasecontainerstoredprocedures
   - sqldatabasecontainerthroughputsettings
@@ -80299,6 +81594,8 @@ rules:
   - mongodbdatabases/status
   - mongodbdatabasethroughputsettings/finalizers
   - mongodbdatabasethroughputsettings/status
+  - mongodbuserdefinitions/finalizers
+  - mongodbuserdefinitions/status
   - sqldatabasecontainers/finalizers
   - sqldatabasecontainers/status
   - sqldatabasecontainerstoredprocedures/finalizers
@@ -80462,6 +81759,33 @@ rules:
   - extensions/status
   - fluxconfigurations/finalizers
   - fluxconfigurations/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - kusto.azure.com
+  resources:
+  - clusters
+  - databases
+  - dataconnections
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kusto.azure.com
+  resources:
+  - clusters/finalizers
+  - clusters/status
+  - databases/finalizers
+  - databases/status
+  - dataconnections/finalizers
+  - dataconnections/status
   verbs:
   - get
   - patch
@@ -80731,6 +82055,36 @@ rules:
   - patch
   - update
 - apiGroups:
+  - notificationhubs.azure.com
+  resources:
+  - namespaces
+  - namespacesauthorizationrules
+  - notificationhubs
+  - notificationhubsauthorizationrules
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - notificationhubs.azure.com
+  resources:
+  - namespaces/finalizers
+  - namespaces/status
+  - namespacesauthorizationrules/finalizers
+  - namespacesauthorizationrules/status
+  - notificationhubs/finalizers
+  - notificationhubs/status
+  - notificationhubsauthorizationrules/finalizers
+  - notificationhubsauthorizationrules/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - operationalinsights.azure.com
   resources:
   - workspaces
@@ -80823,6 +82177,7 @@ rules:
   - namespacestopics
   - namespacestopicssubscriptions
   - namespacestopicssubscriptionsrules
+  - topicauthorizationrules
   verbs:
   - create
   - delete
@@ -80846,6 +82201,8 @@ rules:
   - namespacestopicssubscriptions/status
   - namespacestopicssubscriptionsrules/finalizers
   - namespacestopicssubscriptionsrules/status
+  - topicauthorizationrules/finalizers
+  - topicauthorizationrules/status
   verbs:
   - get
   - patch
@@ -80853,6 +82210,9 @@ rules:
 - apiGroups:
   - signalrservice.azure.com
   resources:
+  - customcertificates
+  - customdomains
+  - replicas
   - signalrs
   verbs:
   - create
@@ -80865,6 +82225,12 @@ rules:
 - apiGroups:
   - signalrservice.azure.com
   resources:
+  - customcertificates/finalizers
+  - customcertificates/status
+  - customdomains/finalizers
+  - customdomains/status
+  - replicas/finalizers
+  - replicas/status
   - signalrs/finalizers
   - signalrs/status
   verbs:
@@ -81056,6 +82422,7 @@ rules:
   resources:
   - serverfarms
   - sites
+  - sitessourcecontrols
   verbs:
   - create
   - delete
@@ -81071,6 +82438,8 @@ rules:
   - serverfarms/status
   - sites/finalizers
   - sites/status
+  - sitessourcecontrols/finalizers
+  - sitessourcecontrols/status
   verbs:
   - get
   - patch
@@ -81450,7 +82819,7 @@ stringData:
   AZURE_SUBSCRIPTION_ID: ""
   AZURE_SYNC_PERIOD: ${AZURE_SYNC_PERIOD:=""}
   AZURE_TENANT_ID: ""
-  AZURE_USER_AGENT_SUFFIX: cluster-api-provider-azure/v1.21.1
+  AZURE_USER_AGENT_SUFFIX: cluster-api-provider-azure/main
 type: Opaque
 ---
 apiVersion: v1
@@ -81469,7 +82838,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     control-plane: controller-manager
   name: azureserviceoperator-controller-manager-metrics-service
   namespace: capz-system
@@ -81485,7 +82854,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
   name: azureserviceoperator-webhook-service
   namespace: capz-system
 spec:
@@ -81514,23 +82883,25 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.11.0
+    app.kubernetes.io/version: v2.13.0
     control-plane: controller-manager
   name: azureserviceoperator-controller-manager
   namespace: capz-system
 spec:
-  replicas: 1
+  replicas: 2
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       control-plane: controller-manager
+  strategy:
+    type: Recreate
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container: manager
       labels:
         app.kubernetes.io/name: azure-service-operator
-        app.kubernetes.io/version: v2.11.0
+        app.kubernetes.io/version: v2.13.0
         control-plane: controller-manager
     spec:
       containers:
@@ -81545,6 +82916,8 @@ spec:
         - --webhook-port=9443
         - --webhook-cert-dir=/tmp/k8s-webhook-server/serving-certs
         env:
+        - name: GOMEMLIMIT
+          value: 400MiB
         - name: AZURE_CLIENT_ID
           valueFrom:
             secretKeyRef:
@@ -81561,6 +82934,18 @@ spec:
             secretKeyRef:
               key: AZURE_TENANT_ID
               name: aso-controller-settings
+        - name: AZURE_ADDITIONAL_TENANTS
+          valueFrom:
+            secretKeyRef:
+              key: AZURE_ADDITIONAL_TENANTS
+              name: aso-controller-settings
+              optional: true
+        - name: AZURE_USER_ASSIGNED_IDENTITY_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              key: AZURE_USER_ASSIGNED_IDENTITY_CREDENTIALS
+              name: aso-controller-settings
+              optional: true
         - name: AZURE_SUBSCRIPTION_ID
           valueFrom:
             secretKeyRef:
@@ -81650,11 +83035,17 @@ spec:
               key: RATE_LIMIT_BUCKET_SIZE
               name: aso-controller-settings
               optional: true
+        - name: DEFAULT_RECONCILE_POLICY
+          valueFrom:
+            secretKeyRef:
+              key: DEFAULT_RECONCILE_POLICY
+              name: aso-controller-settings
+              optional: true
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: mcr.microsoft.com/k8s/azureserviceoperator:v2.11.0
+        image: mcr.microsoft.com/k8s/azureserviceoperator:v2.13.0
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
@@ -81774,8 +83165,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.uid
-        image: registry.k8s.io/cluster-api-azure/cluster-api-azure-controller:v1.21.1
-        imagePullPolicy: IfNotPresent
+        image: gcr.io/k8s-staging-cluster-api-azure/cluster-api-azure-controller:main
+        imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /healthz
@@ -81837,6 +83228,20 @@ spec:
               audience: api://AzureADTokenExchange
               expirationSeconds: 3600
               path: azure-identity-token
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/name: azure-service-operator
+    control-plane: controller-manager
+  name: azureserviceoperator-pdb
+  namespace: capz-system
+spec:
+  minAvailable: 50%
+  selector:
+    matchLabels:
+      control-plane: controller-manager
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -82525,6 +83930,90 @@ webhooks:
     - UPDATE
     resources:
     - subscriptions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-app-azure-com-v1api20240301-authconfig
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.authconfigs.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - authconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-app-azure-com-v1api20240301-containerapp
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.containerapps.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - containerapps
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-app-azure-com-v1api20240301-job
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.jobs.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - jobs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-app-azure-com-v1api20240301-managedenvironment
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.managedenvironments.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - managedenvironments
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -83624,6 +85113,48 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /mutate-containerregistry-azure-com-v1api20230701-registry
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230701.registries.containerregistry.azure.com
+  rules:
+  - apiGroups:
+    - containerregistry.azure.com
+    apiVersions:
+    - v1api20230701
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - registries
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-containerregistry-azure-com-v1api20230701-registryreplication
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230701.registryreplications.containerregistry.azure.com
+  rules:
+  - apiGroups:
+    - containerregistry.azure.com
+    apiVersions:
+    - v1api20230701
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - registryreplications
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /mutate-containerservice-azure-com-v1api20210501-managedcluster
   failurePolicy: Fail
   matchPolicy: Exact
@@ -84212,6 +85743,27 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /mutate-dbformysql-azure-com-v1-user
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1.users.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - users
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /mutate-dbformysql-azure-com-v1api20210501-flexibleserver
   failurePolicy: Fail
   matchPolicy: Exact
@@ -84422,13 +85974,118 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
-      path: /mutate-dbformysql-azure-com-v1-user
+      path: /mutate-dbformysql-azure-com-v1api20231230-flexibleserver
   failurePolicy: Fail
   matchPolicy: Exact
-  name: default.v1.users.dbformysql.azure.com
+  name: default.v1api20231230.flexibleservers.dbformysql.azure.com
   rules:
   - apiGroups:
     - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleservers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbformysql-azure-com-v1api20231230-flexibleserversadministrator
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20231230.flexibleserversadministrators.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversadministrators
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbformysql-azure-com-v1api20231230-flexibleserversconfiguration
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20231230.flexibleserversconfigurations.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbformysql-azure-com-v1api20231230-flexibleserversdatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20231230.flexibleserversdatabases.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversdatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbformysql-azure-com-v1api20231230-flexibleserversfirewallrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20231230.flexibleserversfirewallrules.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversfirewallrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbforpostgresql-azure-com-v1-user
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1.users.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
     apiVersions:
     - v1
     operations:
@@ -84779,20 +86436,146 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
-      path: /mutate-dbforpostgresql-azure-com-v1-user
+      path: /mutate-dbforpostgresql-azure-com-v1api20240801-flexibleserver
   failurePolicy: Fail
   matchPolicy: Exact
-  name: default.v1.users.dbforpostgresql.azure.com
+  name: default.v1api20240801.flexibleservers.dbforpostgresql.azure.com
   rules:
   - apiGroups:
     - dbforpostgresql.azure.com
     apiVersions:
-    - v1
+    - v1api20240801
     operations:
     - CREATE
     - UPDATE
     resources:
-    - users
+    - flexibleservers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbforpostgresql-azure-com-v1api20240801-flexibleserversadvancedthreatprotectionsettings
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240801.flexibleserversadvancedthreatprotectionsettings.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversadvancedthreatprotectionsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbforpostgresql-azure-com-v1api20240801-flexibleserversbackup
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240801.flexibleserversbackups.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversbackups
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbforpostgresql-azure-com-v1api20240801-flexibleserversconfiguration
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240801.flexibleserversconfigurations.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbforpostgresql-azure-com-v1api20240801-flexibleserversdatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240801.flexibleserversdatabases.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversdatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbforpostgresql-azure-com-v1api20240801-flexibleserversfirewallrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240801.flexibleserversfirewallrules.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversfirewallrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-dbforpostgresql-azure-com-v1api20240801-flexibleserversvirtualendpoint
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240801.flexibleserversvirtualendpoints.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversvirtualendpoints
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -85367,6 +87150,300 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-databaseaccount
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.databaseaccounts.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databaseaccounts
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-mongodbdatabasecollection
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.mongodbdatabasecollections.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabasecollections
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-mongodbdatabasecollectionthroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.mongodbdatabasecollectionthroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabasecollectionthroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-mongodbdatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.mongodbdatabases.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-mongodbdatabasethroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.mongodbdatabasethroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabasethroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-mongodbuserdefinition
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.mongodbuserdefinitions.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbuserdefinitions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqldatabasecontainer
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqldatabasecontainers.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqldatabasecontainerstoredprocedure
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqldatabasecontainerstoredprocedures.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainerstoredprocedures
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqldatabasecontainerthroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqldatabasecontainerthroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainerthroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqldatabasecontainertrigger
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqldatabasecontainertriggers.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainertriggers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqldatabasecontaineruserdefinedfunction
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqldatabasecontaineruserdefinedfunctions.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontaineruserdefinedfunctions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqldatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqldatabases.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqldatabasethroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqldatabasethroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasethroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-documentdb-azure-com-v1api20240815-sqlroleassignment
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240815.sqlroleassignments.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqlroleassignments
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /mutate-eventgrid-azure-com-v1api20200601-domain
   failurePolicy: Fail
   matchPolicy: Exact
@@ -85556,6 +87633,111 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /mutate-eventhub-azure-com-v1api20240101-namespace
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespaces.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-eventhub-azure-com-v1api20240101-namespacesauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespacesauthorizationrules.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-eventhub-azure-com-v1api20240101-namespaceseventhub
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespaceseventhubs.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaceseventhubs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-eventhub-azure-com-v1api20240101-namespaceseventhubsauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespaceseventhubsauthorizationrules.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaceseventhubsauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-eventhub-azure-com-v1api20240101-namespaceseventhubsconsumergroup
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespaceseventhubsconsumergroups.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaceseventhubsconsumergroups
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /mutate-insights-azure-com-v1api20180301-metricalert
   failurePolicy: Fail
   matchPolicy: Exact
@@ -85724,6 +87906,27 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /mutate-insights-azure-com-v1api20240101preview-scheduledqueryrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101preview.scheduledqueryrules.insights.azure.com
+  rules:
+  - apiGroups:
+    - insights.azure.com
+    apiVersions:
+    - v1api20240101preview
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - scheduledqueryrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /mutate-keyvault-azure-com-v1api20210401preview-vault
   failurePolicy: Fail
   matchPolicy: Exact
@@ -85801,6 +88004,111 @@ webhooks:
     - UPDATE
     resources:
     - fluxconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-kubernetesconfiguration-azure-com-v1api20241101-extension
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20241101.extensions.kubernetesconfiguration.azure.com
+  rules:
+  - apiGroups:
+    - kubernetesconfiguration.azure.com
+    apiVersions:
+    - v1api20241101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - extensions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-kubernetesconfiguration-azure-com-v1api20241101-fluxconfiguration
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20241101.fluxconfigurations.kubernetesconfiguration.azure.com
+  rules:
+  - apiGroups:
+    - kubernetesconfiguration.azure.com
+    apiVersions:
+    - v1api20241101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - fluxconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-kusto-azure-com-v1api20230815-cluster
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230815.clusters.kusto.azure.com
+  rules:
+  - apiGroups:
+    - kusto.azure.com
+    apiVersions:
+    - v1api20230815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - clusters
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-kusto-azure-com-v1api20230815-database
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230815.databases.kusto.azure.com
+  rules:
+  - apiGroups:
+    - kusto.azure.com
+    apiVersions:
+    - v1api20230815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-kusto-azure-com-v1api20230815-dataconnection
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230815.dataconnections.kusto.azure.com
+  rules:
+  - apiGroups:
+    - kusto.azure.com
+    apiVersions:
+    - v1api20230815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - dataconnections
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -87698,6 +90006,90 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /mutate-notificationhubs-azure-com-v1api20230901-namespace
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230901.namespaces.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-notificationhubs-azure-com-v1api20230901-namespacesauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230901.namespacesauthorizationrules.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-notificationhubs-azure-com-v1api20230901-notificationhub
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230901.notificationhubs.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - notificationhubs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-notificationhubs-azure-com-v1api20230901-notificationhubsauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20230901.notificationhubsauthorizationrules.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - notificationhubsauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /mutate-operationalinsights-azure-com-v1api20210601-workspace
   failurePolicy: Fail
   matchPolicy: Exact
@@ -88160,6 +90552,153 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /mutate-servicebus-azure-com-v1api20240101-namespace
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespaces.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-servicebus-azure-com-v1api20240101-namespacesauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespacesauthorizationrules.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-servicebus-azure-com-v1api20240101-namespacesqueue
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespacesqueues.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesqueues
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-servicebus-azure-com-v1api20240101-namespacestopic
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespacestopics.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacestopics
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-servicebus-azure-com-v1api20240101-namespacestopicssubscription
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespacestopicssubscriptions.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacestopicssubscriptions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-servicebus-azure-com-v1api20240101-namespacestopicssubscriptionsrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.namespacestopicssubscriptionsrules.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacestopicssubscriptionsrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-servicebus-azure-com-v1api20240101-topicauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240101.topicauthorizationrules.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - topicauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /mutate-signalrservice-azure-com-v1api20211001-signalr
   failurePolicy: Fail
   matchPolicy: Exact
@@ -88174,6 +90713,111 @@ webhooks:
     - UPDATE
     resources:
     - signalrs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-signalrservice-azure-com-v1api20240301-customcertificate
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.customcertificates.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - customcertificates
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-signalrservice-azure-com-v1api20240301-customdomain
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.customdomains.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - customdomains
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-signalrservice-azure-com-v1api20240301-replica
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.replicas.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - replicas
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-signalrservice-azure-com-v1api20240301-signalr
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20240301.signalrs.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - signalrs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-sql-azure-com-v1-user
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1.users.sql.azure.com
+  rules:
+  - apiGroups:
+    - sql.azure.com
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - users
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -88636,27 +91280,6 @@ webhooks:
     - UPDATE
     resources:
     - serversvulnerabilityassessments
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: azureserviceoperator-webhook-service
-      namespace: capz-system
-      path: /mutate-sql-azure-com-v1-user
-  failurePolicy: Fail
-  matchPolicy: Exact
-  name: default.v1.users.sql.azure.com
-  rules:
-  - apiGroups:
-    - sql.azure.com
-    apiVersions:
-    - v1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - users
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -89308,6 +91931,27 @@ webhooks:
     - UPDATE
     resources:
     - sites
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /mutate-web-azure-com-v1api20220301-sitessourcecontrol
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: default.v1api20220301.sitessourcecontrols.web.azure.com
+  rules:
+  - apiGroups:
+    - web.azure.com
+    apiVersions:
+    - v1api20220301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sitessourcecontrols
   sideEffects: None
 ---
 apiVersion: admissionregistration.k8s.io/v1
@@ -90150,6 +92794,90 @@ webhooks:
     - UPDATE
     resources:
     - subscriptions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-app-azure-com-v1api20240301-authconfig
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.authconfigs.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - authconfigs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-app-azure-com-v1api20240301-containerapp
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.containerapps.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - containerapps
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-app-azure-com-v1api20240301-job
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.jobs.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - jobs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-app-azure-com-v1api20240301-managedenvironment
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.managedenvironments.app.azure.com
+  rules:
+  - apiGroups:
+    - app.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - managedenvironments
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -91249,6 +93977,48 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /validate-containerregistry-azure-com-v1api20230701-registry
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230701.registries.containerregistry.azure.com
+  rules:
+  - apiGroups:
+    - containerregistry.azure.com
+    apiVersions:
+    - v1api20230701
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - registries
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-containerregistry-azure-com-v1api20230701-registryreplication
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230701.registryreplications.containerregistry.azure.com
+  rules:
+  - apiGroups:
+    - containerregistry.azure.com
+    apiVersions:
+    - v1api20230701
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - registryreplications
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /validate-containerservice-azure-com-v1api20210501-managedcluster
   failurePolicy: Fail
   matchPolicy: Exact
@@ -91837,6 +94607,27 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /validate-dbformysql-azure-com-v1-user
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1.users.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - users
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /validate-dbformysql-azure-com-v1api20210501-flexibleserver
   failurePolicy: Fail
   matchPolicy: Exact
@@ -92047,13 +94838,118 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
-      path: /validate-dbformysql-azure-com-v1-user
+      path: /validate-dbformysql-azure-com-v1api20231230-flexibleserver
   failurePolicy: Fail
   matchPolicy: Exact
-  name: validate.v1.users.dbformysql.azure.com
+  name: validate.v1api20231230.flexibleservers.dbformysql.azure.com
   rules:
   - apiGroups:
     - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleservers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbformysql-azure-com-v1api20231230-flexibleserversadministrator
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20231230.flexibleserversadministrators.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversadministrators
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbformysql-azure-com-v1api20231230-flexibleserversconfiguration
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20231230.flexibleserversconfigurations.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbformysql-azure-com-v1api20231230-flexibleserversdatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20231230.flexibleserversdatabases.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversdatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbformysql-azure-com-v1api20231230-flexibleserversfirewallrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20231230.flexibleserversfirewallrules.dbformysql.azure.com
+  rules:
+  - apiGroups:
+    - dbformysql.azure.com
+    apiVersions:
+    - v1api20231230
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversfirewallrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbforpostgresql-azure-com-v1-user
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1.users.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
     apiVersions:
     - v1
     operations:
@@ -92404,20 +95300,146 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
-      path: /validate-dbforpostgresql-azure-com-v1-user
+      path: /validate-dbforpostgresql-azure-com-v1api20240801-flexibleserver
   failurePolicy: Fail
   matchPolicy: Exact
-  name: validate.v1.users.dbforpostgresql.azure.com
+  name: validate.v1api20240801.flexibleservers.dbforpostgresql.azure.com
   rules:
   - apiGroups:
     - dbforpostgresql.azure.com
     apiVersions:
-    - v1
+    - v1api20240801
     operations:
     - CREATE
     - UPDATE
     resources:
-    - users
+    - flexibleservers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbforpostgresql-azure-com-v1api20240801-flexibleserversadvancedthreatprotectionsettings
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240801.flexibleserversadvancedthreatprotectionsettings.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversadvancedthreatprotectionsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbforpostgresql-azure-com-v1api20240801-flexibleserversbackup
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240801.flexibleserversbackups.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversbackups
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbforpostgresql-azure-com-v1api20240801-flexibleserversconfiguration
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240801.flexibleserversconfigurations.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbforpostgresql-azure-com-v1api20240801-flexibleserversdatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240801.flexibleserversdatabases.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversdatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbforpostgresql-azure-com-v1api20240801-flexibleserversfirewallrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240801.flexibleserversfirewallrules.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversfirewallrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-dbforpostgresql-azure-com-v1api20240801-flexibleserversvirtualendpoint
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240801.flexibleserversvirtualendpoints.dbforpostgresql.azure.com
+  rules:
+  - apiGroups:
+    - dbforpostgresql.azure.com
+    apiVersions:
+    - v1api20240801
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - flexibleserversvirtualendpoints
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -92992,6 +96014,300 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-databaseaccount
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.databaseaccounts.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databaseaccounts
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-mongodbdatabasecollection
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.mongodbdatabasecollections.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabasecollections
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-mongodbdatabasecollectionthroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.mongodbdatabasecollectionthroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabasecollectionthroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-mongodbdatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.mongodbdatabases.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-mongodbdatabasethroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.mongodbdatabasethroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbdatabasethroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-mongodbuserdefinition
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.mongodbuserdefinitions.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mongodbuserdefinitions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqldatabasecontainer
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqldatabasecontainers.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqldatabasecontainerstoredprocedure
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqldatabasecontainerstoredprocedures.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainerstoredprocedures
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqldatabasecontainerthroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqldatabasecontainerthroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainerthroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqldatabasecontainertrigger
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqldatabasecontainertriggers.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontainertriggers
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqldatabasecontaineruserdefinedfunction
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqldatabasecontaineruserdefinedfunctions.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasecontaineruserdefinedfunctions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqldatabase
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqldatabases.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqldatabasethroughputsetting
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqldatabasethroughputsettings.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqldatabasethroughputsettings
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-documentdb-azure-com-v1api20240815-sqlroleassignment
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240815.sqlroleassignments.documentdb.azure.com
+  rules:
+  - apiGroups:
+    - documentdb.azure.com
+    apiVersions:
+    - v1api20240815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sqlroleassignments
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /validate-eventgrid-azure-com-v1api20200601-domain
   failurePolicy: Fail
   matchPolicy: Exact
@@ -93181,6 +96497,111 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /validate-eventhub-azure-com-v1api20240101-namespace
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespaces.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-eventhub-azure-com-v1api20240101-namespacesauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespacesauthorizationrules.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-eventhub-azure-com-v1api20240101-namespaceseventhub
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespaceseventhubs.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaceseventhubs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-eventhub-azure-com-v1api20240101-namespaceseventhubsauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespaceseventhubsauthorizationrules.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaceseventhubsauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-eventhub-azure-com-v1api20240101-namespaceseventhubsconsumergroup
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespaceseventhubsconsumergroups.eventhub.azure.com
+  rules:
+  - apiGroups:
+    - eventhub.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaceseventhubsconsumergroups
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /validate-insights-azure-com-v1api20180301-metricalert
   failurePolicy: Fail
   matchPolicy: Exact
@@ -93349,6 +96770,27 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /validate-insights-azure-com-v1api20240101preview-scheduledqueryrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101preview.scheduledqueryrules.insights.azure.com
+  rules:
+  - apiGroups:
+    - insights.azure.com
+    apiVersions:
+    - v1api20240101preview
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - scheduledqueryrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /validate-keyvault-azure-com-v1api20210401preview-vault
   failurePolicy: Fail
   matchPolicy: Exact
@@ -93426,6 +96868,111 @@ webhooks:
     - UPDATE
     resources:
     - fluxconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-kubernetesconfiguration-azure-com-v1api20241101-extension
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20241101.extensions.kubernetesconfiguration.azure.com
+  rules:
+  - apiGroups:
+    - kubernetesconfiguration.azure.com
+    apiVersions:
+    - v1api20241101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - extensions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-kubernetesconfiguration-azure-com-v1api20241101-fluxconfiguration
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20241101.fluxconfigurations.kubernetesconfiguration.azure.com
+  rules:
+  - apiGroups:
+    - kubernetesconfiguration.azure.com
+    apiVersions:
+    - v1api20241101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - fluxconfigurations
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-kusto-azure-com-v1api20230815-cluster
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230815.clusters.kusto.azure.com
+  rules:
+  - apiGroups:
+    - kusto.azure.com
+    apiVersions:
+    - v1api20230815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - clusters
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-kusto-azure-com-v1api20230815-database
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230815.databases.kusto.azure.com
+  rules:
+  - apiGroups:
+    - kusto.azure.com
+    apiVersions:
+    - v1api20230815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - databases
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-kusto-azure-com-v1api20230815-dataconnection
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230815.dataconnections.kusto.azure.com
+  rules:
+  - apiGroups:
+    - kusto.azure.com
+    apiVersions:
+    - v1api20230815
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - dataconnections
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -95323,6 +98870,90 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /validate-notificationhubs-azure-com-v1api20230901-namespace
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230901.namespaces.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-notificationhubs-azure-com-v1api20230901-namespacesauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230901.namespacesauthorizationrules.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-notificationhubs-azure-com-v1api20230901-notificationhub
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230901.notificationhubs.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - notificationhubs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-notificationhubs-azure-com-v1api20230901-notificationhubsauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20230901.notificationhubsauthorizationrules.notificationhubs.azure.com
+  rules:
+  - apiGroups:
+    - notificationhubs.azure.com
+    apiVersions:
+    - v1api20230901
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - notificationhubsauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /validate-operationalinsights-azure-com-v1api20210601-workspace
   failurePolicy: Fail
   matchPolicy: Exact
@@ -95785,6 +99416,153 @@ webhooks:
     service:
       name: azureserviceoperator-webhook-service
       namespace: capz-system
+      path: /validate-servicebus-azure-com-v1api20240101-namespace
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespaces.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-servicebus-azure-com-v1api20240101-namespacesauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespacesauthorizationrules.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-servicebus-azure-com-v1api20240101-namespacesqueue
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespacesqueues.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacesqueues
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-servicebus-azure-com-v1api20240101-namespacestopic
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespacestopics.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacestopics
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-servicebus-azure-com-v1api20240101-namespacestopicssubscription
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespacestopicssubscriptions.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacestopicssubscriptions
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-servicebus-azure-com-v1api20240101-namespacestopicssubscriptionsrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.namespacestopicssubscriptionsrules.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespacestopicssubscriptionsrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-servicebus-azure-com-v1api20240101-topicauthorizationrule
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240101.topicauthorizationrules.servicebus.azure.com
+  rules:
+  - apiGroups:
+    - servicebus.azure.com
+    apiVersions:
+    - v1api20240101
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - topicauthorizationrules
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
       path: /validate-signalrservice-azure-com-v1api20211001-signalr
   failurePolicy: Fail
   matchPolicy: Exact
@@ -95799,6 +99577,111 @@ webhooks:
     - UPDATE
     resources:
     - signalrs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-signalrservice-azure-com-v1api20240301-customcertificate
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.customcertificates.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - customcertificates
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-signalrservice-azure-com-v1api20240301-customdomain
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.customdomains.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - customdomains
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-signalrservice-azure-com-v1api20240301-replica
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.replicas.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - replicas
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-signalrservice-azure-com-v1api20240301-signalr
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20240301.signalrs.signalrservice.azure.com
+  rules:
+  - apiGroups:
+    - signalrservice.azure.com
+    apiVersions:
+    - v1api20240301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - signalrs
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-sql-azure-com-v1-user
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1.users.sql.azure.com
+  rules:
+  - apiGroups:
+    - sql.azure.com
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - users
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -96261,27 +100144,6 @@ webhooks:
     - UPDATE
     resources:
     - serversvulnerabilityassessments
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: azureserviceoperator-webhook-service
-      namespace: capz-system
-      path: /validate-sql-azure-com-v1-user
-  failurePolicy: Fail
-  matchPolicy: Exact
-  name: validate.v1.users.sql.azure.com
-  rules:
-  - apiGroups:
-    - sql.azure.com
-    apiVersions:
-    - v1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - users
   sideEffects: None
 - admissionReviewVersions:
   - v1
@@ -96933,6 +100795,27 @@ webhooks:
     - UPDATE
     resources:
     - sites
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: azureserviceoperator-webhook-service
+      namespace: capz-system
+      path: /validate-web-azure-com-v1api20220301-sitessourcecontrol
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validate.v1api20220301.sitessourcecontrols.web.azure.com
+  rules:
+  - apiGroups:
+    - web.azure.com
+    apiVersions:
+    - v1api20220301
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - sitessourcecontrols
   sideEffects: None
 ---
 apiVersion: admissionregistration.k8s.io/v1
