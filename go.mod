@@ -109,9 +109,9 @@ require (
 	golang.org/x/sys v0.40.0
 	golang.org/x/term v0.39.0
 	golang.org/x/text v0.34.0
-	google.golang.org/api v0.255.0
-	google.golang.org/genproto/googleapis/api v0.0.0-20250825161204-c5933d9347a5
-	google.golang.org/grpc v1.76.0
+	google.golang.org/api v0.257.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20260128011058-8636f8732409
+	google.golang.org/grpc v1.78.0
 	gopkg.in/ini.v1 v1.67.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.35.1
