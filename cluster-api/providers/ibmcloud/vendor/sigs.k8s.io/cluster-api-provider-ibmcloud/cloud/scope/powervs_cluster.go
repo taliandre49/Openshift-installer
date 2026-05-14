@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	"github.com/go-logr/logr"
+
 	regionUtil "github.com/ppc64le-cloud/powervs-utils"
 
 	"github.com/IBM-Cloud/power-go-client/ibmpisession"
@@ -174,7 +175,9 @@ func NewPowerVSClusterScope(params PowerVSClusterScopeParams) (*PowerVSClusterSc
 	// if Spec.ServiceInstanceID is set fetch zone associated with it or else use Spec.Zone.
 	if params.IBMPowerVSCluster.Spec.ServiceInstanceID != "" {
 		// Create Resource Controller client.
-		var serviceOption resourcecontroller.ServiceOptions
+		serviceOption := resourcecontroller.ServiceOptions{
+			ResourceControllerV2Options: &resourcecontrollerv2.ResourceControllerV2Options{},
+		}
 		// Fetch the resource controller endpoint.
 		rcEndpoint := endpoints.FetchEndpoints(string(endpoints.RC), params.ServiceEndpoint)
 		if rcEndpoint != "" {
@@ -313,6 +316,7 @@ func (params PowerVSClusterScopeParams) getTransitGatewayClient(options *tgapiv1
 	if params.TransitGatewayFactory != nil {
 		return params.TransitGatewayFactory()
 	}
+
 	// Fetch the TransitGateway service endpoint.
 	tgServiceEndpoint := endpoints.FetchEndpoints(string(endpoints.TransitGateway), params.ServiceEndpoint)
 	if tgServiceEndpoint != "" {
@@ -1791,6 +1795,7 @@ func (s *PowerVSClusterScope) isTransitGatewayExists(ctx context.Context) (*tgap
 		transitGateway, _, err = s.TransitGatewayClient.GetTransitGateway(&tgapiv1.GetTransitGatewayOptions{
 			ID: s.IBMPowerVSCluster.Spec.TransitGateway.ID,
 		})
+
 	} else {
 		transitGateway, err = s.TransitGatewayClient.GetTransitGatewayByName(*s.GetServiceName(infrav1.ResourceTypeTransitGateway))
 	}
@@ -2377,7 +2382,7 @@ func (s *PowerVSClusterScope) createCOSBucket() error {
 func (s *PowerVSClusterScope) checkCOSServiceInstance(ctx context.Context) (*resourcecontrollerv2.ResourceInstance, error) {
 	log := ctrl.LoggerFrom(ctx)
 	// check cos service instance
-	serviceInstance, err := s.ResourceClient.GetInstanceByName(*s.GetServiceName(infrav1.ResourceTypeCOSInstance), resourcecontroller.CosResourceID, resourcecontroller.CosResourcePlanID)
+	serviceInstance, err := s.ResourceClient.GetInstanceByName(*s.GetServiceName(infrav1.ResourceTypeCOSInstance), resourcecontroller.CosResourceID, resourcecontroller.GetCOSResourcePlanID())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get COS service instance: %w", err)
 	}
@@ -2404,7 +2409,7 @@ func (s *PowerVSClusterScope) createCOSServiceInstance() (*resourcecontrollerv2.
 		Name:           s.GetServiceName(infrav1.ResourceTypeCOSInstance),
 		Target:         &target,
 		ResourceGroup:  &resourceGroupID,
-		ResourcePlanID: ptr.To(resourcecontroller.CosResourcePlanID),
+		ResourcePlanID: ptr.To(resourcecontroller.GetCOSResourcePlanID()),
 	})
 	if err != nil {
 		return nil, err
@@ -2417,7 +2422,6 @@ func (s *PowerVSClusterScope) fetchResourceGroupID() (string, error) {
 	if s.ResourceGroup() == nil || s.ResourceGroup().Name == nil {
 		return "", fmt.Errorf("resource group name is not set")
 	}
-
 	auth, err := authenticator.GetAuthenticator()
 	if err != nil {
 		return "", err

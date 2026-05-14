@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"golang.org/x/net/http/httpproxy"
+	"sigs.k8s.io/cluster-api-provider-ibmcloud/pkg/cloud/services/authenticator"
 
 	"github.com/IBM/ibm-cos-sdk-go/aws"
 	"github.com/IBM/ibm-cos-sdk-go/aws/credentials/ibmiam"
@@ -121,7 +122,16 @@ func NewService(options ServiceOptions, apikey, serviceInstance string) (Cos, er
 			ExpectContinueTimeout: 1 * time.Second,
 		},
 	}
-	options.Config.Credentials = ibmiam.NewStaticCredentials(aws.NewConfig(), iamEndpoint, apikey, serviceInstance)
+
+	// Get IAM endpoint from authenticator properties, fallback to default.
+	cosIAMEndpoint := iamEndpoint
+	if props, err := authenticator.GetProperties(); err == nil {
+		if authURL := props["AUTH_URL"]; authURL != "" {
+			cosIAMEndpoint = authURL + "/identity/token"
+		}
+	}
+
+	options.Config.Credentials = ibmiam.NewStaticCredentials(aws.NewConfig(), cosIAMEndpoint, apikey, serviceInstance)
 
 	sess, err := cosSession.NewSessionWithOptions(*options.Options)
 	if err != nil {
