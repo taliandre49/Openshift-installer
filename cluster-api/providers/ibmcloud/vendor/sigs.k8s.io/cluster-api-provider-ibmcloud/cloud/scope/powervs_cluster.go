@@ -24,7 +24,6 @@ import (
 	"strings"
 
 	"github.com/go-logr/logr"
-
 	regionUtil "github.com/ppc64le-cloud/powervs-utils"
 
 	"github.com/IBM-Cloud/power-go-client/ibmpisession"
@@ -175,9 +174,7 @@ func NewPowerVSClusterScope(params PowerVSClusterScopeParams) (*PowerVSClusterSc
 	// if Spec.ServiceInstanceID is set fetch zone associated with it or else use Spec.Zone.
 	if params.IBMPowerVSCluster.Spec.ServiceInstanceID != "" {
 		// Create Resource Controller client.
-		serviceOption := resourcecontroller.ServiceOptions{
-			ResourceControllerV2Options: &resourcecontrollerv2.ResourceControllerV2Options{},
-		}
+		var serviceOption resourcecontroller.ServiceOptions
 		// Fetch the resource controller endpoint.
 		rcEndpoint := endpoints.FetchEndpoints(string(endpoints.RC), params.ServiceEndpoint)
 		if rcEndpoint != "" {
@@ -316,7 +313,6 @@ func (params PowerVSClusterScopeParams) getTransitGatewayClient(options *tgapiv1
 	if params.TransitGatewayFactory != nil {
 		return params.TransitGatewayFactory()
 	}
-
 	// Fetch the TransitGateway service endpoint.
 	tgServiceEndpoint := endpoints.FetchEndpoints(string(endpoints.TransitGateway), params.ServiceEndpoint)
 	if tgServiceEndpoint != "" {
@@ -1795,7 +1791,6 @@ func (s *PowerVSClusterScope) isTransitGatewayExists(ctx context.Context) (*tgap
 		transitGateway, _, err = s.TransitGatewayClient.GetTransitGateway(&tgapiv1.GetTransitGatewayOptions{
 			ID: s.IBMPowerVSCluster.Spec.TransitGateway.ID,
 		})
-
 	} else {
 		transitGateway, err = s.TransitGatewayClient.GetTransitGatewayByName(*s.GetServiceName(infrav1.ResourceTypeTransitGateway))
 	}
@@ -2422,6 +2417,7 @@ func (s *PowerVSClusterScope) fetchResourceGroupID() (string, error) {
 	if s.ResourceGroup() == nil || s.ResourceGroup().Name == nil {
 		return "", fmt.Errorf("resource group name is not set")
 	}
+
 	auth, err := authenticator.GetAuthenticator()
 	if err != nil {
 		return "", err

@@ -193,13 +193,9 @@ func NewPowerVSMachineScope(params PowerVSMachineScopeParams) (scope *PowerVSMac
 		CloudInstanceID: serviceInstanceID,
 	}
 
-	// Fetch the service endpoint.
-	// Use FetchEndpoints (ID-only match) rather than the deprecated FetchPVSEndpoint
-	// (region+ID match). FetchPVSEndpoint silently returns "" when the region derived from
-	// serviceInstance.RegionID does not match the region stored in the ServiceEndpoint list,
-	// leaving the session URL as the production default and generating a "bluemix" CRN
-	// instead of "staging" — causing the PowerVS API to validate the token against
-	// iam.cloud.ibm.com/identity/keys instead of iam.test.cloud.ibm.com/identity/keys.
+	// Use FetchEndpoints (ID-only match) so that PowerVS service URL overrides are applied
+	// regardless of whether res.RegionID round-trips through ConstructRegionFromZone to the
+	// same region string stored in the ServiceEndpoint list.
 	if svcEndpoint := endpoints.FetchEndpoints(string(endpoints.PowerVS), params.ServiceEndpoint); svcEndpoint != "" {
 		serviceOptions.IBMPIOptions.URL = svcEndpoint
 		params.Logger.V(3).Info("Overriding the default PowerVS service endpoint", "serviceEndpoint", svcEndpoint)

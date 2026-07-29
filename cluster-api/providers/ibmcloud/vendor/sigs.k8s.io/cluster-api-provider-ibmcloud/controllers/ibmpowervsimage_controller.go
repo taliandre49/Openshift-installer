@@ -232,9 +232,9 @@ func reconcileImage(ctx context.Context, img *models.ImageReference, imageScope 
 		}
 
 		imageScope.SetImageID(image.ImageID)
-		log.Info("ImageID", "imageID", imageScope.GetImageID())
+		log.Info("Setting image ID", "imageID", imageScope.GetImageID())
 		imageScope.SetImageState(image.State)
-		log.Info("ImageState", "imageState", image.State)
+		log.Info("Current image state", "imageState", image.State)
 
 		switch imageScope.GetImageState() {
 		case infrav1.PowerVSImageStateQueued:
@@ -325,7 +325,6 @@ func (r *IBMPowerVSImageReconciler) reconcileDelete(ctx context.Context, scope *
 }
 
 func (r *IBMPowerVSImageReconciler) getOrCreate(ctx context.Context, scope *scope.PowerVSImageScope) (*models.ImageReference, *models.JobReference, error) {
-
 	image, job, err := scope.CreateImageCOSBucket(ctx)
 	return image, job, err
 }

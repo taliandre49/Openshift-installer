@@ -43,8 +43,8 @@ const (
 	// ibmcloud catalog service cloud-object-storage.
 	CosResourceID = "dff97f5c-bc5e-4455-b470-411c3edbe49c"
 
-	// CosResourcePlanID is IBM COS Standard plan id (paid, production accounts).
-	// Can be retrieved using: ibmcloud catalog service cloud-object-storage.
+	// CosResourcePlanID is IBM COS plan id, can be retrieved using ibmcloud cli
+	// ibmcloud catalog service cloud-object-storage.
 	CosResourcePlanID = "1e4e33e4-cfa6-4f12-9016-be594a6d5f87"
 
 	// CosResourceLitePlanID is IBM COS Lite plan id (free, staging/non-paid accounts).

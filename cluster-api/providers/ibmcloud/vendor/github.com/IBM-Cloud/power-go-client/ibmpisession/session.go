@@ -121,8 +121,7 @@ func (s *IBMPISession) AuthInfo(cloudInstanceID string) runtime.ClientAuthInfoWr
 		if err := r.SetHeaderParam("Authorization", auth); err != nil {
 			return err
 		}
-		crnHeader := fmt.Sprintf(s.CRNFormat, cloudInstanceID)
-		return r.SetHeaderParam("CRN", crnHeader)
+		return r.SetHeaderParam("CRN", fmt.Sprintf(s.CRNFormat, cloudInstanceID))
 	})
 }
 

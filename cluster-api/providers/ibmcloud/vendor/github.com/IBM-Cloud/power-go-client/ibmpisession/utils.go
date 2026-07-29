@@ -30,9 +30,7 @@ func fetchAuthorizationData(a core.Authenticator) (string, error) {
 	if err := a.Authenticate(req); err != nil {
 		return "", err
 	}
-	authHeader := req.Header.Get("Authorization")
-
-	return authHeader, nil
+	return req.Header.Get("Authorization"), nil
 }
 
 // crnBuilder Return string format to create CRN using the cloud instance id

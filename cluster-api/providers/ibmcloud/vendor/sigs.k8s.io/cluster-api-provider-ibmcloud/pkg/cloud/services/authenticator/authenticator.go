@@ -67,9 +67,11 @@ func GetIAMAuthenticator() (*core.IamAuthenticator, error) {
 
 	apiKey := props["APIKEY"]
 	if apiKey == "" {
-		return nil, fmt.Errorf("ibmcloud api key is not provided, set IBMCLOUD_APIKEY environmental variable")
+		fmt.Printf("ibmcloud api key is not provided, set %s environmental variable", "IBMCLOUD_API_KEY")
 	}
 
+	// URL is the IAM token endpoint base URL (e.g. https://iam.test.cloud.ibm.com).
+	// When empty the IBM SDK defaults to the production endpoint (https://iam.cloud.ibm.com).
 	auth := &core.IamAuthenticator{
 		ApiKey: apiKey,
 		URL:    props["AUTH_URL"],

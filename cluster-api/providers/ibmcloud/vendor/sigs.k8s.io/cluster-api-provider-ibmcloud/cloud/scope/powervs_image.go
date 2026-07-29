@@ -135,15 +135,9 @@ func NewPowerVSImageScope(ctx context.Context, params PowerVSImageScopeParams) (
 		},
 	}
 
-	// Fetch the service endpoint.
-	// Use FetchEndpoints (matches on ID only) rather than the deprecated FetchPVSEndpoint
-	// (which also requires a region match). The cluster scope's getPowerVSClient uses the
-	// same ID-only lookup; using the region-aware variant here caused the URL override to be
-	// silently skipped when res.RegionID did not round-trip through ConstructRegionFromZone
-	// to the same region string that was stored in the ServiceEndpoint list, leaving the
-	// session URL as the production default and producing a "bluemix" CRN instead of
-	// "staging", which then caused the PowerVS API to validate the bearer token against
-	// iam.cloud.ibm.com/identity/keys instead of iam.test.cloud.ibm.com/identity/keys.
+	// Use FetchEndpoints (ID-only match) so that PowerVS service URL overrides are applied
+	// regardless of whether res.RegionID round-trips through ConstructRegionFromZone to the
+	// same region string stored in the ServiceEndpoint list.
 	if svcEndpoint := endpoints.FetchEndpoints(string(endpoints.PowerVS), params.ServiceEndpoint); svcEndpoint != "" {
 		options.IBMPIOptions.URL = svcEndpoint
 		log.V(3).Info("Overriding the default PowerVS service endpoint", "serviceEndpoint", svcEndpoint)
