@@ -115,3 +115,44 @@ func TestListVPCRoutingTables(t *testing.T) {
 		assert.True(t, *got[1].RouteTransitGatewayIngress)
 	}
 }
+
+func TestSetVPCRoutingTableRouteNextHop(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		currentHop  string
+		routeName   string
+		wantChanged bool
+		wantPatch   bool
+		wantErr     bool
+	}{
+		{name: "next hop differs", currentHop: "10.0.64.4", routeName: "rt-default", wantChanged: true, wantPatch: true},
+		{name: "next hop already correct", currentHop: "10.0.0.5", routeName: "rt-default"},
+		{name: "route missing", currentHop: "10.0.0.5", routeName: "other", wantErr: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			patched := false
+			c := newTestVPCClient(t, func(string) map[string]http.HandlerFunc {
+				return map[string]http.HandlerFunc{
+					"/v1/vpcs/vpc-a/routing_tables/rt-1/routes": func(w http.ResponseWriter, _ *http.Request) {
+						writeJSON(t, w, fmt.Sprintf(`{"limit":50,"total_count":1,"routes":[
+						{"id":"route-1","name":"rt-default","action":"deliver","destination":"0.0.0.0/0","next_hop":{"address":%q}}]}`, tc.currentHop))
+					},
+					"/v1/vpcs/vpc-a/routing_tables/rt-1/routes/route-1": func(w http.ResponseWriter, r *http.Request) {
+						assert.Equal(t, http.MethodPatch, r.Method)
+						patched = true
+						writeJSON(t, w, `{"id":"route-1","name":"rt-default"}`)
+					},
+				}
+			})
+
+			changed, err := c.SetVPCRoutingTableRouteNextHop(context.Background(), "vpc-a", "us-south", "rt-1", tc.routeName, "10.0.0.5")
+			if tc.wantErr {
+				assert.Error(t, err)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, tc.wantChanged, changed)
+			assert.Equal(t, tc.wantPatch, patched)
+		})
+	}
+}
